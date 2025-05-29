@@ -1,31 +1,34 @@
 const express = require('express');
-const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const cors = require('cors');
-const connectDB = require('./config/db');
+const dotenv = require('dotenv');
+const { register, login } = require('./controllers/authController'); // Destructure functions
 
-// Load up the .env file
 dotenv.config();
 
-// Fire up that MongoDB connection
-connectDB();
-
-// Create the express app
 const app = express();
-
-// This lets the app accept JSON in requests
-app.use(cors());             // Allows frontend (on a different port) to talk to the backend
-app.use(express.json());     // Parses incoming JSON data (req.body)
-
-// Just a test route to make sure the server works
-app.get('/', (req, res) => {
-  res.send('🎉 SalesSync API is up and running!');
-});
-const productRoutes = require('./routes/productRoutes');
-app.use('/api/products', productRoutes);
-
-
-// Pick a port and start the server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server listening on port ${PORT}`);
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.get('/', (req, res) => {
+  res.send('SalesSync backend is live');
+});
+
+app.post('/api/auth/register', register);
+app.post('/api/auth/login', login);
+
+// MongoDB Connection and Server Start
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+  });
+}).catch((err) => {
+  console.error('❌ MongoDB connection error:', err);
 });
