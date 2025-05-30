@@ -25,10 +25,7 @@ app.post('/api/auth/register', register);
 app.post('/api/auth/login', login);
 
 // MongoDB Connection and Server Start
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => {
+mongoose.connect(process.env.MONGO_URI).then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
