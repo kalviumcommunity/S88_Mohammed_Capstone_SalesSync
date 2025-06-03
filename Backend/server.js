@@ -18,7 +18,7 @@ app.use(express.json());     // Parses incoming JSON data (req.body)
 
 // Just a test route to make sure the server works
 app.get('/', (req, res) => {
-  res.send('🎉 SalesSync API is up and running!');
+  res.send(' SalesSync API is up and running!');
 });
 const productRoutes = require('./routes/productRoutes');
 app.use('/api/products', productRoutes);
